@@ -1,0 +1,16 @@
+FROM node:16-alpine
+# Install necessary user management tools
+RUN apk --no-cache add shadow
+# Create a non-root user
+RUN useradd -ms /bin/bash myuser
+
+WORKDIR '/app'
+RUN chown -R myuser:myuser /app
+
+USER myuser
+
+COPY ./package.json ./
+RUN npm install
+
+COPY . .
+CMD ["npm", "run", "start"]
